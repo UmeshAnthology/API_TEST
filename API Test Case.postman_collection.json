@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "b8c47790-1bd0-47c4-bc8e-8118d02a77a6",
+		"name": "API Test Case",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37353459"
+	},
+	"item": [
+		{
+			"name": "Create user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var id;\r",
+							"var name;\r",
+							"var email;\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    console.log(jsonData);\r",
+							"     id =jsonData.id;\r",
+							"     name=jsonData.name;\r",
+							"     email=jsonData.email\r",
+							"console.log(\"UserID:\",id);\r",
+							"});\r",
+							"\r",
+							"pm.globals.set('userid', id);\r",
+							"pm.globals.set('username', name);\r",
+							"pm.globals.set('email', email);\r",
+							"setTimeout(function(){},3000);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 42f1e30183529b157ca2a7d4c1959548c4cc8809da8b12652bfaa8c5a1efcf9d",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Umesh{{$randomInt}}\",\r\n  \"email\": \"umesh.{{$randomInt}}@gmail.com\",\r\n  \"gender\": \"male\",\r\n  \"status\": \"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var name;\r",
+							"var email\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     email=jsonData.email;\r",
+							"     name =jsonData.name;\r",
+							"    console.log(\"Email:\",email);\r",
+							"    console.log(\"Name:\",name);\r",
+							"\r",
+							"});\r",
+							"createdusername=pm.globals.get(\"username\");\r",
+							"createdemail=pm.globals.get(\"email\");\r",
+							"\r",
+							"if (createdusername === name && createdemail===email )\r",
+							"{\r",
+							"    console.log(\"Sucessfully retrived Username and Email\");\r",
+							"}\r",
+							"else\r",
+							"{\r",
+							" console.log(\"Sucessfully retrived Username and Email\");\r",
+							" pm.expect.fail(\"Not Sucessfully retrived Username and Email\");  \r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 42f1e30183529b157ca2a7d4c1959548c4cc8809da8b12652bfaa8c5a1efcf9d",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{userid}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{userid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
